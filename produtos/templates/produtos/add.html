@@ -1,0 +1,27 @@
+{% extends "produtos/base.html" %}
+
+{% block body %}
+    <h3 class="text-center m-4">Adicionar Produto</h3>
+    {% if success %}
+        <div class="alert alert-success" role="alert">
+            Produto adicionado com sucesso
+            <a href="{% url 'index' %}" class="alert-link">Volte a página inicial.</a>
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card bg-light mb-3">
+                    <div class="card-header"><i class="fa-solid fa-circle-info fa-lg"></i> Registro do produto</div>
+                    <div class="card-body">
+                      <form action="{% url 'add' %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                        <a href="{% url 'index' %}" class="btn btn-secondary">Cancelar</a>
+                      </form>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

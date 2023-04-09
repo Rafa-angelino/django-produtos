@@ -1,0 +1,111 @@
+{% extends "produtos/base.html" %}
+
+{% block body %}
+<h3 class="m-4">Todos produtos<h3>
+    <div class="row">
+        <div class="col-12">
+            {% if produtos %}
+                <div class="card bg-light ms-4 mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-list fa-lg"></i> Produtos cadastrados
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Codigo produto</th>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Descricao</th>
+                                        <th scope="col">Barra</th>
+                                        <th scope="col">Valor</th>
+                                        <th scope="col">Estoque</th>
+                                        <th scope="col">Ações</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for produto in produtos %}
+                                            <tr>
+                                                <td>{{ produto.cod_prod }}</td>
+                                                <td>{{ produto.nome }}</td>
+                                                <td>{{ produto.descricao }}</td>
+                                                <td>{{ produto.barra }}</td>
+                                                <td>{{ produto.valor }}</td>
+                                                <td>{{ produto.estoque }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success me-1" href="{% url 'view_produto' produto.id %}" data-bs-toggle="modal" 
+                                                    data-bs-target="#myModal{{produto.id}}"><i class="fa-solid fa-circle-info fa-lg"></i></button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal" id="myModal{{produto.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title">Produto: {{ produto.nome }} - Valor: {{ produto.valor }}</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true"></span>
+                                                              </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                              <ul class="list-unstyled">
+                                                                <li>Código produto: <strong>{{ produto.cod_prod }}</strong></li>
+                                                                <li>Nome do produto: <strong>{{ produto.nome }}</strong></li>
+                                                                <li> Descrição: <strong>{{ produto.descricao }}</strong></li>
+                                                                <li>Código de barra: <strong>{{ produto.barra }}</strong></li>
+                                                                <li>Valor: <strong>R$ {{ produto.valor}}</strong></li>
+                                                                <li>Estoque: <strong>{{ produto.estoque }} UN</strong></li>
+                                                              </ul>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    <a class="btn btn-warning me-1" href="{% url 'edit' produto.id %}">
+                                                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{produto.id}}">
+                                                        <i class="fa-regular fa-trash-can fa-lg"></i>
+                                                    </button>
+
+                                                    <!--Modal delete-->
+                                                    <div class="modal" id="delete{{produto.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title">Produto: {{ produto.nome }} - Valor: {{ produto.valor }}</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true"></span>
+                                                              </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                              <p>Tem certeza que deseja deletar o produto?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="{% url 'delete' produto.id %}" method="POST">
+                                                                    {% csrf_token %}
+                                                                    <input type="submit" class="btn btn-primary" value="Deletar">
+                                                                </form>
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            {% else %}
+                <h5 class="alert alert-primary ms-4 me-4">Não foi encontrado produtos</h5>
+            {% endif %}
+           
+        </div>
+    </div>
+{% endblock %}
